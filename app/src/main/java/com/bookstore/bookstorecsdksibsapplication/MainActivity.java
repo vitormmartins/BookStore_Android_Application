@@ -1,5 +1,6 @@
 package com.bookstore.bookstorecsdksibsapplication;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,8 +34,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         TextView tv = binding.sampleText;
-        // Call the JNI method and set the result to the TextView
-        tv.setText(getDataFromJNI());
 
         // Initialize book list and adapter
         bookList = new ArrayList<>();
@@ -44,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
         ListView listView = binding.listView;
         listView.setAdapter(bookAdapter);
 
-        // Fetch and display books
-        fetchAndDisplayBooks();
+        // Execute AsyncTask to fetch data from JNI
+        new FetchDataAsyncTask().execute();
     }
 
     /**
@@ -54,29 +53,35 @@ public class MainActivity extends AppCompatActivity {
      */
     public native String getDataFromJNI();
 
-    // Method to fetch and display books
-    private void fetchAndDisplayBooks() {
-        // Replace this JSON string with your actual data-fetching mechanism
-        String jsonString = getDataFromJNI();
+    // AsyncTask to fetch and display books
+    private class FetchDataAsyncTask extends AsyncTask<Void, Void, String> {
 
-        try {
-            JSONArray jsonArray = new JSONArray(jsonString);
+        @Override
+        protected String doInBackground(Void... params) {
+            // Call the JNI method in the background thread
+            return getDataFromJNI();
+        }
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String title = jsonObject.getString("title");
-                String thumbnailUrl = jsonObject.getString("thumbnailUrl");
+        @Override
+        protected void onPostExecute(String jsonString) {
+            try {
+                JSONArray jsonArray = new JSONArray(jsonString);
 
-                // Create a Book object and add it to the list
-                Book book = new Book(title, thumbnailUrl);
-                bookList.add(book);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String title = jsonObject.getString("title");
+                    String thumbnailUrl = jsonObject.getString("thumbnailUrl");
+
+                    // Create a Book object and add it to the list
+                    Book book = new Book(title, thumbnailUrl);
+                    bookList.add(book);
+                }
+
+                bookAdapter.notifyDataSetChanged();
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
-            // Notify the adapter that the data set has changed
-            bookAdapter.notifyDataSetChanged();
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 }
