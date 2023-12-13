@@ -13,9 +13,3 @@ target_include_directories(BookStore_SDKTest PRIVATE
 target_include_directories(BookStore_SDKTest INTERFACE
     include)
 
-# Add include and library paths for OpenSSL
-#include_directories(include/openssl)
-#link_directories(libs/x86_64)
-
-# Link against OpenSSL libraries
-#target_link_libraries(your_target_name ssl crypto)
