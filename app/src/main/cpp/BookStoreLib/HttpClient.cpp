@@ -1,4 +1,5 @@
 // HttpClient.cpp
+#define CPPHTTPLIB_OPENSSL_SUPPORT
 #include "httplib.h"
 #include "HttpClient.h"
 

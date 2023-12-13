@@ -40,7 +40,7 @@ set_target_properties(crypto
 
 message(ANDROID_ABI: ${ANDROID_ABI})
 
-enable_testing()
+#enable_testing()
 
 add_subdirectory(BookStoreLib)
 #add_subdirectory(unit_tests)
