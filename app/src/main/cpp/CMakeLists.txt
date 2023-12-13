@@ -40,6 +40,8 @@ set_target_properties(crypto
 
 message(ANDROID_ABI: ${ANDROID_ABI})
 
+include_directories(${CMAKE_SOURCE_DIR}/include)
+
 #enable_testing()
 
 add_subdirectory(BookStoreLib)
