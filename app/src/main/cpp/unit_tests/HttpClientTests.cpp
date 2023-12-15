@@ -16,7 +16,25 @@ protected:
 };
 
 TEST_F(HttpClientTests, SendHttpGetSuccess) {
+    std::string url = "https://www.googleapis.com/books/v1/volumes?q=ios&maxResults=20&startIndex=0";
     auto actual = HttpClient::sendHttpGet();
 
     ASSERT_NE(actual, nullptr);
 }
+
+//TEST_F(HttpClientTests, SendHttpGetFailure) {
+//    std::string url = "https://nonexistent-url";
+//    auto actual = HttpClient::sendHttpGet();
+//
+//    ASSERT_EQ(actual, nullptr);
+//}
+
+TEST_F(HttpClientTests, WriteCallbackSuccess) {
+    std::string output;
+    char contents[] = "Hello World!";
+    auto actual = HttpClient::WriteCallback(contents, 1, sizeof(contents), &output);
+
+    ASSERT_EQ(actual, sizeof(contents));
+    ASSERT_STREQ(output.c_str(), "Hello World!");
+}
+
