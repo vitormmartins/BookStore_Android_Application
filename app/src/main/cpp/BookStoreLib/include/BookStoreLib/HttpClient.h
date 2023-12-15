@@ -10,7 +10,7 @@ static const char *const path = "/books/v1/volumes?q=ios&maxResults=20&startInde
 
 class HttpClient {
 public:
-    static size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* output);
+    static size_t writeCallback(void* contents, size_t size, size_t nmemb, std::string* output);
 
     static char *sendHttpGet();
 };

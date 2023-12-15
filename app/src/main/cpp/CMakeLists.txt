@@ -14,14 +14,7 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_library(${CMAKE_PROJECT_NAME} SHARED
-        native-lib.cpp
-        )
-
-target_link_libraries(${CMAKE_PROJECT_NAME}
-        BookStore_SDKTest
-        android
-        log)
+add_link_options(-lz)
 
 add_library(ssl STATIC IMPORTED)
 set_target_properties(ssl
@@ -44,3 +37,14 @@ enable_testing()
 add_subdirectory(BookStoreLib)
 add_subdirectory(unit_tests)
 
+add_library(${CMAKE_PROJECT_NAME} SHARED
+        native-lib.cpp
+        )
+
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${ZLIB_INCLUDE_DIRS})
+
+target_link_libraries(${CMAKE_PROJECT_NAME}
+        BookStore_SDKTest
+        libz
+        android
+        log)

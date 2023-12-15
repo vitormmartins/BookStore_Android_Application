@@ -2,7 +2,7 @@
 #include "HttpClient.h"
 #include <curl/curl.h>
 
-size_t HttpClient::WriteCallback(void* contents, size_t size, size_t nmemb, std::string* output) {
+size_t HttpClient::writeCallback(void* contents, size_t size, size_t nmemb, std::string* output) {
     size_t total_size = size * nmemb;
     output->append(static_cast<char*>(contents), total_size);
     return total_size;
@@ -21,7 +21,7 @@ char * HttpClient::sendHttpGet() {
 
         // Set the write callback function to handle the response
         std::string response_data;
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_data);
 
         // Perform the HTTP GET request

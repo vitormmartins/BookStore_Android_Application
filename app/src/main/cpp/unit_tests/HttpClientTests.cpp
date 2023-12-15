@@ -25,7 +25,7 @@ TEST_F(HttpClientTests, SendHttpGetSuccess) {
 TEST_F(HttpClientTests, WriteCallbackSuccess) {
     std::string output;
     char contents[] = "Hello World!";
-    auto actual = HttpClient::WriteCallback(contents, 1, sizeof(contents), &output);
+    auto actual = HttpClient::writeCallback(contents, 1, sizeof(contents), &output);
 
     ASSERT_EQ(actual, sizeof(contents));
     ASSERT_STREQ(output.c_str(), "Hello World!");
