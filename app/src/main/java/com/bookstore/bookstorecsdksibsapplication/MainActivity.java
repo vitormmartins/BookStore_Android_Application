@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(bookAdapter);
 
         // Execute AsyncTask to fetch data from JNI
-        new FetchDataAsyncTask().execute();
+        new FetchDataAsyncTask_java_test().execute();
     }
 
     /**
@@ -58,14 +57,13 @@ public class MainActivity extends AppCompatActivity {
      */
     public native String getDataFromJNI();
 
-    public class FetchDataAsyncTask extends AsyncTask<Void, Void, String> {
+    public class FetchDataAsyncTask_java_test extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... params) {
             // Call the JNI method in the background thread
             String jsonDataFromJNI;
-//            jsonDataFromJNI = getDataFromJNI();
-            jsonDataFromJNI = "[]";
+            jsonDataFromJNI = getDataFromJNI();
 
             try {
                 URL url = new URL("https://www.googleapis.com/books/v1/volumes?q=ios&maxResults=20&startIndex=0");
@@ -99,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     // AsyncTask to fetch and display books
-    private class FetchDataAsyncTask_old extends AsyncTask<Void, Void, String> {
+    private class FetchDataAsyncTask extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... params) {
