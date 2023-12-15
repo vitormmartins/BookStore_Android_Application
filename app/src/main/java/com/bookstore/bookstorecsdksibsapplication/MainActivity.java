@@ -40,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        TextView tv = binding.sampleText;
-
         // Initialize book list and adapter
         bookList = new ArrayList<>();
         bookAdapter = new BookAdapter(this, R.layout.book_list_item, bookList);
@@ -60,18 +58,17 @@ public class MainActivity extends AppCompatActivity {
      */
     public native String getDataFromJNI();
 
-
-
     public class FetchDataAsyncTask extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... params) {
             // Call the JNI method in the background thread
-            String jsonDataFromJNI = getDataFromJNI();
+            String jsonDataFromJNI;
+//            jsonDataFromJNI = getDataFromJNI();
+            jsonDataFromJNI = "[]";
 
-            // Perform HTTP GET request to https://www.pudim.com.br
             try {
-                URL url = new URL("https://www.pudim.com.br");
+                URL url = new URL("https://www.googleapis.com/books/v1/volumes?q=ios&maxResults=20&startIndex=0");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
                 try {

@@ -5,10 +5,8 @@
 #include <string>
 
 
-static const char *const googleapisURL = "http://www.pudim.com.br";
-//static const char *const googleapisURL = "https://www.googleapis.com";
-static const char *const path = "/";
-//static const char *const path = "/books/v1/volumes?q=ios&maxResults=20&startIndex=0";
+static const char *const googleapisURL = "https://www.googleapis.com";
+static const char *const path = "/books/v1/volumes?q=ios&maxResults=20&startIndex=0";
 
 class HttpClient {
 public:

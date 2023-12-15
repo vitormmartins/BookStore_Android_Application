@@ -22,13 +22,6 @@ TEST_F(HttpClientTests, SendHttpGetSuccess) {
     ASSERT_NE(actual, nullptr);
 }
 
-//TEST_F(HttpClientTests, SendHttpGetFailure) {
-//    std::string url = "https://nonexistent-url";
-//    auto actual = HttpClient::sendHttpGet();
-//
-//    ASSERT_EQ(actual, nullptr);
-//}
-
 TEST_F(HttpClientTests, WriteCallbackSuccess) {
     std::string output;
     char contents[] = "Hello World!";
