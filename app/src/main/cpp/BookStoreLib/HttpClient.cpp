@@ -18,9 +18,14 @@ char * HttpClient::sendHttpGet() {
     if (curl) {
         // Set the URL
         curl_easy_setopt(curl, CURLOPT_URL, googleapisURL);
+#ifdef __ANDROID__
+        // For https requests, you need to specify the ca-bundle path
+        curl_easy_setopt(curl, CURLOPT_CAINFO, CA_BUNDLE_PATH);
+#endif
 
         // Set the write callback function to handle the response
         std::string response_data;
+        curl_easy_setopt(curl, CURLOPT_CAINFO, CA_BUNDLE_PATH);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_data);
 

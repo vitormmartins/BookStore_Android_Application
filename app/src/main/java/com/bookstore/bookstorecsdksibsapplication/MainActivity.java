@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    private String CA_BUNDLE;
 
     // Used to load the 'application' library on application startup.
     static {
@@ -47,15 +48,19 @@ public class MainActivity extends AppCompatActivity {
         ListView listView = binding.listView;
         listView.setAdapter(bookAdapter);
 
+        CurlHelper.copyCaBundleFromAssetsToInternalStorage(this);
+        CA_BUNDLE = CurlHelper.getCaBundlePath(this);
+
+
         // Execute AsyncTask to fetch data from JNI
-        new FetchDataAsyncTask_java_test().execute();
+        new FetchDataAsyncTask().execute();
     }
 
     /**
      * A native method that is implemented by the 'application' native library,
      * which is packaged with this application.
      */
-    public native String getDataFromJNI();
+    public native String getDataFromJNI(String caBundlePath);
 
     public class FetchDataAsyncTask_java_test extends AsyncTask<Void, Void, String> {
 
@@ -63,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(Void... params) {
             // Call the JNI method in the background thread
             String jsonDataFromJNI;
-            jsonDataFromJNI = getDataFromJNI();
+            jsonDataFromJNI = getDataFromJNI(CA_BUNDLE);
 
             try {
                 URL url = new URL("https://www.googleapis.com/books/v1/volumes?q=ios&maxResults=20&startIndex=0");
@@ -102,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... params) {
             // Call the JNI method in the background thread
-            return getDataFromJNI();
+            return getDataFromJNI(CA_BUNDLE);
         }
 
         @Override

@@ -2,6 +2,10 @@
 #ifndef HTTPCLIENT_H
 #define HTTPCLIENT_H
 
+#ifdef __ANDROID__
+extern char *CA_BUNDLE_PATH;
+#endif
+
 #include <string>
 
 
