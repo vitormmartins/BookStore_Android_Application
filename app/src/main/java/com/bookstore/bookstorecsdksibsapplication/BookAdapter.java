@@ -51,7 +51,6 @@ public class BookAdapter extends ArrayAdapter<Book> {
         // Set book title
         holder.titleTextView.setText(book.getTitle());
 
-        // Load thumbnail image using Picasso (you need to add Picasso library to your dependencies)
         Picasso.get().load(book.getThumbnailUrl()).into(holder.thumbnailImageView);
 
         return row;
