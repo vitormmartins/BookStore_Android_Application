@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private BookAdapter bookAdapter;
     private ArrayList<Book> bookList;
+    private ArrayList<String> authors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize book list and adapter
         bookList = new ArrayList<>();
+        authors = new ArrayList<>();
         bookAdapter = new BookAdapter(this, R.layout.book_list_item, bookList);
 
         // Set up ListView with the adapter
@@ -83,10 +85,15 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                     String title = jsonObject.getJSONObject("volumeInfo").getString("title");
+                    for (int j = 0; j < jsonObject.getJSONObject("volumeInfo").getJSONArray("authors").length(); j++) {
+                        authors.add(jsonObject.getJSONObject("volumeInfo").getJSONArray("authors").getString(j));
+                    }
                     String thumbnailUrl = jsonObject.getJSONObject("volumeInfo").getJSONObject("imageLinks").getString("smallThumbnail");
+                    String description = jsonObject.getJSONObject("volumeInfo").getString("description");
+                    String buyLink = jsonObject.getJSONObject("saleInfo").getString("buyLink");
 
                     // Create a Book object and add it to the list
-                    Book book = new Book(title, thumbnailUrl);
+                    Book book = new Book(title, thumbnailUrl, authors, description, buyLink);
                     bookList.add(book);
                 }
 

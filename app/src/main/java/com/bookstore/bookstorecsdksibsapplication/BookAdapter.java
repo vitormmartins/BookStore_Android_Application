@@ -1,6 +1,7 @@
 package com.bookstore.bookstorecsdksibsapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View row = convertView;
         BookHolder holder;
 
@@ -48,13 +49,18 @@ public class BookAdapter extends ArrayAdapter<Book> {
 
         Book book = data.get(position);
 
-        // Set book title
         holder.titleTextView.setText(book.getTitle());
 
-        // Load thumbnail image using Picasso (you need to add Picasso library to your dependencies)
         Picasso.get().load(book.getThumbnailUrl()).into(holder.thumbnailImageView);
 
-        return row;
+        assert convertView != null;
+        convertView.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), BookDetailActivity.class);
+            intent.putExtra("selectedBook", (CharSequence) getItem(position));
+            getContext().startActivity(intent);
+        });
+
+        return convertView;
     }
 
     static class BookHolder {
@@ -62,3 +68,4 @@ public class BookAdapter extends ArrayAdapter<Book> {
         ImageView thumbnailImageView;
     }
 }
+
