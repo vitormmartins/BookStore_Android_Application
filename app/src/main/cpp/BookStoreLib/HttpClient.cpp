@@ -1,6 +1,7 @@
 // HttpClient.cpp
-#include "HttpClient.h"
 #include <curl/curl.h>
+#include "HttpClient.h"
+
 
 size_t HttpClient::writeCallback(void* contents, size_t size, size_t nmemb, std::string* output) {
     size_t total_size = size * nmemb;
@@ -8,7 +9,7 @@ size_t HttpClient::writeCallback(void* contents, size_t size, size_t nmemb, std:
     return total_size;
 }
 
-char * HttpClient::sendHttpGet() {
+char * HttpClient::sendHttpGet(char *ca_bundle_path) {
     CURL* curl;
     CURLcode res;
 
@@ -18,14 +19,12 @@ char * HttpClient::sendHttpGet() {
     if (curl) {
         // Set the URL
         curl_easy_setopt(curl, CURLOPT_URL, googleapisURL);
-#ifdef __ANDROID__
-        // For https requests, you need to specify the ca-bundle path
-        curl_easy_setopt(curl, CURLOPT_CAINFO, CA_BUNDLE_PATH);
-#endif
-
         // Set the write callback function to handle the response
         std::string response_data;
-        curl_easy_setopt(curl, CURLOPT_CAINFO, CA_BUNDLE_PATH);
+#ifdef __ANDROID__
+        // For https requests, you need to specify the ca-bundle path
+        curl_easy_setopt(curl, CURLOPT_CAINFO, ca_bundle_path);
+#endif
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_data);
 

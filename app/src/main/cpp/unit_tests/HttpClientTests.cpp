@@ -17,7 +17,7 @@ protected:
 
 TEST_F(HttpClientTests, SendHttpGetSuccess) {
     std::string url = "https://www.googleapis.com/books/v1/volumes?q=ios&maxResults=20&startIndex=0";
-    auto actual = HttpClient::sendHttpGet();
+    auto actual = HttpClient::sendHttpGet(nullptr);
 
     ASSERT_NE(actual, nullptr);
 }
