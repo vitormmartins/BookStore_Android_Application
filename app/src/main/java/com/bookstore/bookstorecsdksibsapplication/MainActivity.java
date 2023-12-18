@@ -62,44 +62,6 @@ public class MainActivity extends AppCompatActivity {
      */
     public native String getDataFromJNI(String caBundlePath);
 
-    public class FetchDataAsyncTask_java_test extends AsyncTask<Void, Void, String> {
-
-        @Override
-        protected String doInBackground(Void... params) {
-            // Call the JNI method in the background thread
-            String jsonDataFromJNI;
-            jsonDataFromJNI = getDataFromJNI(CA_BUNDLE);
-
-            try {
-                URL url = new URL("https://www.googleapis.com/books/v1/volumes?q=ios&maxResults=20&startIndex=0");
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-
-                try {
-                    InputStream in = urlConnection.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                    StringBuilder content = new StringBuilder();
-                    String line;
-
-                    while ((line = reader.readLine()) != null) {
-                        content.append(line).append("\n");
-                    }
-
-                    return jsonDataFromJNI + "\n\n" + content;
-                } finally {
-                    urlConnection.disconnect();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                return jsonDataFromJNI + "\n\nError fetching data from https://www.pudim.com.br";
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            Log.d("HTTP GET Result", result);
-        }
-    }
-
 
     // AsyncTask to fetch and display books
     private class FetchDataAsyncTask extends AsyncTask<Void, Void, String> {
@@ -113,12 +75,15 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String jsonString) {
             try {
-                JSONArray jsonArray = new JSONArray(jsonString);
+                JSONObject object = new JSONObject(jsonString);
+                JSONArray jsonArray  = object.getJSONArray("items");
 
-                for (int i = 0; i < jsonArray.length(); i++) {
+                for (int i = 0; i < jsonArray.length(); i++)
+                {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    String title = jsonObject.getString("title");
-                    String thumbnailUrl = jsonObject.getString("thumbnailUrl");
+
+                    String title = jsonObject.getJSONObject("volumeInfo").getString("title");
+                    String thumbnailUrl = jsonObject.getJSONObject("volumeInfo").getJSONObject("imageLinks").getString("smallThumbnail");
 
                     // Create a Book object and add it to the list
                     Book book = new Book(title, thumbnailUrl);
